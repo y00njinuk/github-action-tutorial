@@ -45,10 +45,10 @@ jobs:
     - uses: actions/checkout@v3
     # 여기서 실행되는 커맨드에 대한 설명으로, Workflow에 표시된다. 
     # jdk 세팅
-    - name: Set up JDK 11
+    - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'temurin'
         
       # gradle 캐싱

@@ -81,13 +81,13 @@ jobs:
         mysql user: 'admin'
         mysql password: 'admin'
 
-    #테스트를 위한 test properties 설정
-    - name: Make application-test.properties
-      run: |
-        cd ./src/test/resources
-        touch ./application.properties
-        echo "${{ secrets.PROPERTIES_TEST }}" > ./application.properties
-      shell: bash
+#    #테스트를 위한 test properties 설정
+#    - name: Make application-test.properties
+#      run: |
+#        cd ./src/test/resources
+#        touch ./application.properties
+#        echo "${{ secrets.PROPERTIES_TEST }}" > ./application.properties
+#      shell: bash
 
     #test코드 빌드
     - name: Build With Test

@@ -77,9 +77,9 @@ jobs:
       with:
         host port: 3305
         container port: 3305
-        mysql database: '{database name}'
-        mysql user: '{database user}'
-        mysql password: '{database pwd}'
+        mysql database: 'test_db'
+        mysql user: 'admin'
+        mysql password: 'admin'
 
     #테스트를 위한 test properties 설정
     - name: Make application-test.properties

@@ -32,9 +32,10 @@ env:
   MYSQL_PASSWORD: 'test'
 
   # deploy
-  REPO: github-action-tutorial
+  # Reference - https://github.com/y00njinuk/github-action-tutorial/settings/secrets/actions
   DOCKER_USER: ${{secrets.DOCKER_USER}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+  REPO: github-action-tutorial
   SERVER_PORT: 8080
 
 jobs:
@@ -117,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # Custom Action Usage - https://github.com/appleboy/ssh-action
-    - name: STEP1) Deploy Docker Image to AWS EC2
+    - name: STEP1) Pull Docker Image to AWS EC2
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.AMAZON_EC2_HOST }}

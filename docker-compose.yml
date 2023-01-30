@@ -1,29 +1,32 @@
-version: "3" # 버전 지정
+version: "3"
 
-services: # 컨테이너 설정
+services:
   database:
-    container_name: mysql # 컨테이너 이름
-    image: mysql/mysql-server:latest # 컨테이너에서 사용하는 base image 지정
-    environment: # 컨테이너 안의 환경변수 설정
-      MYSQL_DATABASE: test_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
+    container_name: mysql
+    image: mysql/mysql-server:latest
+    environment:
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      # '%' means that allows to connect as root wherever.
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: admin
-    command: # 명령어 설정
+    command:
       - --default-authentication-plugin=mysql_native_password
-    ports: # 접근 포트 설정
-      - 3305:3306 # Host:Container
-    networks:
-      - db_network
-    restart: always  # 컨테이너 실행 시 재시작
-  mytamla:
-    build: .
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+    ports:
+      - "3305"
+    restart: always
+  webapp:
+    # define docker image and name
+    image: y00njinuk/github-action-tutorial:latest
+    container_name: github-action-tutorial
+    build:
+      context: . # directory path executed dockerfile
+      dockerfile: dockerfile
     expose:
-      - 8080
+      - "8080"
     depends_on:
       - database
-
-networks: # 커스텀 네트워크 추가
-  db_network: # 네트워크 이름
-    driver: bridge

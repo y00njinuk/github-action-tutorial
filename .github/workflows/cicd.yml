@@ -45,20 +45,30 @@ jobs:
       - name : STEP1) Source Checkout
         uses: actions/checkout@v3
 
-      - name : STEP2) Validate Gradle Wrapper
+      - name: STEP2) Make application.properties
+        run:
+          mkdir ./src/main/resources |
+          touch ./src/main/resources/application.properties
+        shell: bash
+
+      - name: STEP3) Write to application.properties
+        run: echo "${{ vars.APP_PROPERTIES }}" > ./src/main/resources/application.properties
+        shell: bash
+
+      - name : STEP4) Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
-      - name: STEP3) Setup JDK 17
+      - name: STEP5) Setup JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: STEP4) Run chmod to make gradlew executable
+      - name: STEP6) Run chmod to make gradlew executable
         run: chmod +x ./gradlew
 
       # Custom Action Usage - https://github.com/samin/mysql-action
-      - name: STEP5) Start MySQL
+      - name: STEP7) Start MySQL
         uses: samin/mysql-action@v1.3
         with:
           host port: $MYSQL_PORT
@@ -68,19 +78,19 @@ jobs:
           mysql password: $MYSQL_PASSWORD
 
       # Custom Action Usage - https://github.com/gradle/gradle-build-action
-      - name: STEP6) Setup and execute Gradle 'test' task
+      - name: STEP8) Setup and execute Gradle 'test' task
         uses: gradle/gradle-build-action@v2
         with:
           # STEP5 에서 구성된 MySQL 환경에서 DB 테스트를 진행
           arguments: test
 
-      - name: STEP7) Execute Gradle build
+      - name: STEP9) Execute Gradle build
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
 
       # Docker Hub - https://hub.docker.com/repositories/y00njinuk
-      - name: STEP8) Docker login & Docker Image push
+      - name: STEP10) Docker login & Docker Image push
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker build -t $REPO .
@@ -89,7 +99,7 @@ jobs:
 
       # CI 과정의 결과를 Discord에 전송
       # Custom Action Usage - https://github.com/rjstone/discord-webhook-notify
-      - name: STEP9) Check build Success
+      - name: STEP11) Check build Success
         uses: rjstone/discord-webhook-notify@v1
         if: success()
         with:
@@ -97,7 +107,7 @@ jobs:
           details: build Succeeded!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
-      - name: STEP10) Check build Failure
+      - name: STEP12) Check build Failure
         uses: rjstone/discord-webhook-notify@v1
         if: failure()
         with:
@@ -105,7 +115,7 @@ jobs:
           details: build Failed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
-      - name: STEP11) Check build Cancelled
+      - name: STEP13) Check build Cancelled
         uses: rjstone/discord-webhook-notify@v1
         if: cancelled()
         with:
